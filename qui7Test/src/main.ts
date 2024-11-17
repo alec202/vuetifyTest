@@ -1,20 +1,32 @@
-/**
- * main.ts
- *
- * Bootstraps Vuetify and other plugins then mounts the App`
- */
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import { createVuetify } from "vuetify";
+import { createRouter, createWebHashHistory } from "vue-router";
+import App from "./App.vue";
+import "./style.css";
+import "vuetify/styles";
+import "@mdi/font/css/materialdesignicons.css";
+import { aliases, mdi } from "vuetify/iconsets/mdi";
+import { fa } from "vuetify/iconsets/fa";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
+import Home from "./components/Home.vue";
 
-// Plugins
-import { registerPlugins } from '@/plugins'
+// Define routes
+const myComponentRoutes = [{ path: "/", component: Home }];
 
-// Components
-import App from './App.vue'
+// Create router instance
+const myRouter = createRouter({
+  history: createWebHashHistory(),
+  routes: myComponentRoutes,
+});
+const pinia = createPinia();
 
-// Composables
-import { createApp } from 'vue'
+const vuetify = createVuetify({
+  icons: { defaultSet: "mdi", aliases, sets: { mdi, fa } },
+  components,
+  directives,
+});
 
-const app = createApp(App)
-
-registerPlugins(app)
-
-app.mount('#app')
+// Boot the app
+createApp(App).use(myRouter).use(pinia).use(vuetify).mount("#app");
